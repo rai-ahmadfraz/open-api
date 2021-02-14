@@ -9,10 +9,13 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 
 
+const globalMiddleware = require('./middleware/globalmiddleware');
+app.use(globalMiddleware);
+
 app.get('/login',authControler.login);
 app.post('/register',authControler.register);
 
-const verifyToken = require('./middleware/globalmiddleware');
+const verifyToken = require('./middleware/verifyToken');
 app.use(verifyToken);
 
 app.get('/test',(req,res)=>{
