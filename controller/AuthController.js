@@ -7,6 +7,8 @@ dotenv.config();
 
 exports.register = async (req,res)=>{
 
+    res.send(res.body);
+
     const schema = Joi.object({
         password:Joi.required()
     }).options({allowUnknown:true});
@@ -26,6 +28,7 @@ exports.register = async (req,res)=>{
         else
         {
             const password = await bcryt.hash(req.body.password,10);
+            if(password){
             db.User.create({
                 first_name:req.body.first_name,
                 last_name:req.body.last_name,
@@ -36,6 +39,7 @@ exports.register = async (req,res)=>{
             }).catch(err =>{
                 res.send(err.errors[0].message);
             });
+        }
     }
     }
 }
