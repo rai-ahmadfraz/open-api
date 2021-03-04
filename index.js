@@ -2,6 +2,9 @@ const express = require('express');
 const db = require('./models');
 const app = express();
 const authControler = require('./controller/AuthController');
+const multer = require('multer');
+
+var mul = multer();
 
 
 app.use(express.json());
@@ -12,8 +15,8 @@ app.use(express.static('public'));
 const globalMiddleware = require('./middleware/globalmiddleware');
 app.use(globalMiddleware);
 
-app.get('/login',authControler.login);
-app.post('/register',authControler.register);
+app.post('/login',mul.any(),authControler.login);
+app.post('/register',mul.any(),authControler.register);
 
 const verifyToken = require('./middleware/verifyToken');
 app.use(verifyToken);

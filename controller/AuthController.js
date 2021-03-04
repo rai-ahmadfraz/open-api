@@ -7,8 +7,6 @@ dotenv.config();
 
 exports.register = async (req,res)=>{
 
-    res.send(res.body);
-
     const schema = Joi.object({
         password:Joi.required()
     }).options({allowUnknown:true});
@@ -23,7 +21,7 @@ exports.register = async (req,res)=>{
             where:{email:req.body.email}
         });
         if(is_user_exists){
-           res.send("Email already exists");
+           res.send({message:"Email already exists"});
         }
         else
         {
@@ -35,7 +33,14 @@ exports.register = async (req,res)=>{
                 email:req.body.email,
                 password:password
             }).then(response =>{
-                res.send(response);
+                res.send({message:'registered successfully',
+                    user:{
+                    id:response.id,
+                    first_name:response.first_name,
+                    last_name:response.last_name,
+                    email:response.email,
+                }
+            });
             }).catch(err =>{
                 res.send(err.errors[0].message);
             });
@@ -72,14 +77,14 @@ exports.login = async (req,res)=>{
                         avatar:response.avatar,
                         token:token
                     }
-                    res.send(user);
+                    res.send({message:'login successfully',loginUser:user});
                 }else{
-                    res.send('Incorrect password');
+                    res.send({message:'incorrect password'});
                 }
             })
             }
             else{
-                res.send('Email does not exists');
+                res.send({message:'email does not exists'});
             }
         })
         
